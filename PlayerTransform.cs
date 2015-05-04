@@ -43,7 +43,7 @@ public class PlayerTransform : MonoBehaviour {
         }
         transformPosition = heliboxcat.transform.position;
         mainPlayer.SetActive(true);
-        mainPlayer.transform.position = transformPosition;
+        //mainPlayer.transform.position = transformPosition; //set player to transforms position. Not wanted right now.
         heliboxcat.SetActive(false);
         CameraFollow.currentForm = "Player";
         currentTime = 0f;
