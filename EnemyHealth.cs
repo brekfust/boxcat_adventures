@@ -4,16 +4,16 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour {
 
-    public GameObject pounceColliderObject;
-    public GameObject whipColliderObject;
+    //public GameObject pounceColliderObject;
+    //public GameObject whipColliderObject;
     public float currentHealth = 100f;
 
-    Collider pounceCollider;
-    Collider whipCollider;
-    bool alreadyPounced = false;
-    bool alreadyWhipped = false;
-    bool inPounceRange = false;
-    bool inWhipRange = false;
+    //Collider pounceCollider;
+    //Collider whipCollider;
+    //bool alreadyPounced = false;
+    //bool alreadyWhipped = false;
+    //bool inPounceRange = false;
+    //bool inWhipRange = false;
 
 	// Use this for initialization
 	void Start () {

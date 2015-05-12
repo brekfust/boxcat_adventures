@@ -41,13 +41,15 @@ public class PlayerMover : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
 	
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
         float pounce = Input.GetAxisRaw("Fire1");
         float whip = Input.GetAxisRaw("Jump");
 
+        text1.text = isWhipping.ToString();
+        text2.text = isAttacking.ToString();
         //determine if we're allowed to move
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Fall") || isAttacking == true) //let intro animation play before allowing movement
         {
@@ -62,10 +64,11 @@ public class PlayerMover : MonoBehaviour {
         {
             Move(h, v);
             Turning(h, v);
-            animating(h, v, pounce, whip); //always call this before attacking to prevent conflict
+            WalkingAnimation(h, v, pounce, whip); //always call this before attacking to prevent conflict
             //Gravity(gravity);
             Attacking(pounce, whip);
         }
+        pounceTimer += Time.deltaTime; //keep pouncetimer going outside of Attacking() so timer doesn't stop while isAttacking = true
 
 	}
 
@@ -97,37 +100,30 @@ public class PlayerMover : MonoBehaviour {
     //    playerRigidbody.MovePosition(smoothedGravity);
     //}
 
-	void animating(float h, float v, float pounce, float whip)
+	void WalkingAnimation(float h, float v, float pounce, float whip)
 	{
 		bool walking = h!= 0f || v != 0f;
 		anim.SetBool ("IsWalking", walking);
-        if (isAttacking == false)
-        {
-            if (pounce != 0f && pounceTimer > 3)
-            {
-                anim.SetTrigger("IsPouncing");
-            }
-            if (whip != 0f)
-                anim.SetTrigger("IsWhipping");
-        }
 	}
 
     void Attacking(float pounce, float whip)
     {
         
-        pounceTimer += Time.deltaTime;
-        text1.text = pounceTimer.ToString();
+        
+        
         if (pounce != 0 && isAttacking == false && pounceTimer > 3f)
         {
             pounceTimer = 0f;
             isAttacking = true;
             isPouncing = true;
+            anim.SetTrigger("IsPouncing");
             StartCoroutine("Pounce");
         }
         if (whip != 0 && isAttacking == false && isWhipping == false)
         {
             isAttacking = true;
             isWhipping = true;
+            anim.SetTrigger("IsWhipping");
             StartCoroutine("Whip");
         }
     }
@@ -138,12 +134,14 @@ public class PlayerMover : MonoBehaviour {
         Vector3 actualForward;
         actualForward = -Vector3.Cross(playerRigidbody.transform.up, playerRigidbody.transform.forward); //hack to fix models incorrect rotation
         bool isAnimStarted = false;
-        while(isAttacking == true)
+        bool stillPouncing = true;
+        while(stillPouncing == true)
         {
             AnimatorStateInfo pounceAnim;
             pounceAnim = anim.GetCurrentAnimatorStateInfo(0);
             canWalk = false;
 
+            //move up in the air for half the animation
             Vector3 pounceMovement = actualForward * pounceSpeed * Time.deltaTime;
             if (pounceAnim.normalizedTime < .5f)
                 pounceMovement = pounceMovement + Vector3.up * pounceSpeed * Time.deltaTime;
@@ -156,6 +154,7 @@ public class PlayerMover : MonoBehaviour {
             {
                 isAttacking = false;
                 isPouncing = false;
+                stillPouncing = false;
             }
             yield return null;
         }
@@ -164,7 +163,8 @@ public class PlayerMover : MonoBehaviour {
     IEnumerator Whip()
     {
         bool isAnimStarted = false;
-        while (isAttacking == true)
+        bool stillWhipping = true;
+        while (stillWhipping == true)
         {
             AnimatorStateInfo whipAnim;
             whipAnim = anim.GetCurrentAnimatorStateInfo(0);
@@ -176,6 +176,7 @@ public class PlayerMover : MonoBehaviour {
             {
                 isAttacking = false;
                 isWhipping = false;
+                stillWhipping = false;
             }
             yield return null;
         }
