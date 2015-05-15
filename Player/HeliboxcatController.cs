@@ -36,7 +36,7 @@ public class HeliboxcatController : MonoBehaviour {
 
         text1.text = heliRB.transform.position.ToString();
         text2.text = transform.rotation.ToString();
-
+        
 
         heliRB.AddForce(Vector3.up * hoverThrust * Time.deltaTime); //add force so it goes down slowly instead of falling
 
@@ -97,11 +97,15 @@ public class HeliboxcatController : MonoBehaviour {
         rope.SetActive(false);
     }
 
+    
+    //add listener for bombcontroller boom event. this won't be called by sendmessage anymore.
     void ExplosionPush(Vector3 bombPos)
     {
         float distance = Vector3.Distance(bombPos, transform.position);
         heliRB.AddExplosionForce(Mathf.Pow(300f - distance,2), bombPos, 300); 
         
+        
+
         //my attempt at doing this, close but not quite there
         //Quaternion rotate = Quaternion.Inverse(Quaternion.LookRotation(bombPos));
         //heliRB.AddTorque(rotate.eulerAngles * distance * 60, ForceMode.Impulse);
