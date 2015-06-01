@@ -38,6 +38,7 @@ public class PlayerMover : MonoBehaviour {
 		playerRigidbody = GetComponent<Rigidbody> ();
         //pounceCollider = pounceColliderObject.GetComponent<Collider>();
         //whipCollider = whipColliderObject.GetComponent<Collider>();
+        Debug.Log("Changed script!");
 	}
 	
 	// Update is called once per frame
