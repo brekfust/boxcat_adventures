@@ -107,11 +107,9 @@ public class EnemyController : MonoBehaviour {
         {
             yield break;
         }
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length - Time.deltaTime);
-        currentlyAttacking = false;
-        counter = 0f;
+        yield return null;
     }
+
     IEnumerator Swipe()
     {
         if (!currentlyAttacking)
@@ -123,10 +121,29 @@ public class EnemyController : MonoBehaviour {
         {
             yield break;
         }
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length - Time.deltaTime);
+        yield return null;
+
+    }
+
+    void EndSwipe()
+    {
+        currentlyAttacking = false;
+        counter = 0f;
+    }
+    
+    void EndShootFire()
+    {
         currentlyAttacking = false;
         counter = 0f;
     }
 
+    void FadeInFireball()
+    {
+
+    }
+
+    void ShootFireball()
+    {
+
+    }
 }
